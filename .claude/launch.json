@@ -1,0 +1,14 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "claude-compass",
+      "runtimeExecutable": "/bin/zsh",
+      "runtimeArgs": [
+        "-lc",
+        "cd \"/Users/robinvallis/Desktop/Claude Compass/app\" && export PATH=\"/Users/robinvallis/.nvm/versions/node/v24.19.0/bin:$PATH\" && npm run dev -- --host"
+      ],
+      "port": 5173
+    }
+  ]
+}

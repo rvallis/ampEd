@@ -1,10 +1,9 @@
-# Claude Compass
-## Claude Code
-### The Apps Script Grading Pipeline
-
+# AmpEd
+*amplify your ability to educate with Claude*
+## Claude Code → The Apps Script Grading Pipeline
 ---
 
-Every module in Claude Compass has two parts: **THE WHAT** (the actual Claude skill) and **THE HOW** (real stories showing that skill solving a specific, recognizable problem). Pick whichever story feels closest to your own life. You don't need to read them in order, and you don't need to read every module in this course in order either. Start wherever you are.
+Every module in AmpEd has two parts: **THE WHAT** (the actual Claude skill) and **THE HOW** (real stories showing that skill solving a specific, recognizable problem). Pick whichever story feels closest to your own life. You don't need to read them in order, and you don't need to read every module in this course in order either. Start wherever you are.
 
 **A note on this module:** unlike most modules in this course, this one is a single real, lived case study, not several invented-but-realistic stories. This actually happened, built with Claude Code, and is used weekly in a real classroom.
 

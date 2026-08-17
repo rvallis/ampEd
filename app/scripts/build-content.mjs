@@ -63,8 +63,13 @@ function parseModule(filename, raw) {
   const lines = raw.split("\n");
 
   // --- title stack ---
-  const titleLine = lines.find((l) => l.startsWith("### "));
-  const title = titleLine ? titleLine.replace(/^###\s+/, "").trim() : rest;
+  // "# AmpEd" / "*tagline*" / "## Branch → Title" — title is the single H2
+  // line, not an H3 (the old three-line-stack format this used to be).
+  const titleLine = lines.find(
+    (l) => l.startsWith("## ") && !/THE WHAT|THE HOW/i.test(l)
+  );
+  const titleMatch = titleLine?.match(/^##\s+.+?\s*→\s*(.+)$/);
+  const title = titleMatch ? titleMatch[1].trim() : rest;
 
   const whatIdx = findIndex(lines, /^##\s.*THE WHAT/i);
   const howIdx = findIndex(lines, /^##\s.*THE HOW/i);

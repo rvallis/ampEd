@@ -1,10 +1,9 @@
-# Claude Compass
-## Cowork
-### File and Document Handling
-
+# AmpEd
+*amplify your ability to educate with Claude*
+## Cowork → File and Document Handling
 ---
 
-Every module in Claude Compass has two parts: **THE WHAT** (the actual Claude skill) and **THE HOW** (real stories showing that skill solving a specific, recognizable problem). Pick whichever story feels closest to your own life. You don't need to read them in order, and you don't need to read every module in this course in order either. Start wherever you are.
+Every module in AmpEd has two parts: **THE WHAT** (the actual Claude skill) and **THE HOW** (real stories showing that skill solving a specific, recognizable problem). Pick whichever story feels closest to your own life. You don't need to read them in order, and you don't need to read every module in this course in order either. Start wherever you are.
 
 **By the end of this module, you'll be able to:** point Claude at a folder of real files, receipts, notes, drafts, and get organized, usable output back, instead of assembling it by hand yourself.
 

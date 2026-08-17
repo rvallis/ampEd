@@ -1,10 +1,9 @@
-# Claude Compass
-## Claude Chat
-### Interview-Me Prompting
-
+# AmpEd
+*amplify your ability to educate with Claude*
+## Claude Chat → Interview-Me Prompting
 ---
 
-Every module in Claude Compass has two parts: **THE WHAT** (the actual Claude skill) and **THE HOW** (real stories showing that skill solving a specific, recognizable problem). Pick whichever story feels closest to your own life. You don't need to read them in order, and you don't need to read every module in this course in order either. Start wherever you are.
+Every module in AmpEd has two parts: **THE WHAT** (the actual Claude skill) and **THE HOW** (real stories showing that skill solving a specific, recognizable problem). Pick whichever story feels closest to your own life. You don't need to read them in order, and you don't need to read every module in this course in order either. Start wherever you are.
 
 **By the end of this module, you'll be able to:** flip the usual order, and have Claude ask you questions before it starts working, instead of guessing at what you need.
 

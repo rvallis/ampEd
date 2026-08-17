@@ -1,10 +1,9 @@
-# Claude Compass
-## Claude Code
-### Auto-Compact
-
+# AmpEd
+*amplify your ability to educate with Claude*
+## Claude Code → Auto-Compact
 ---
 
-Every module in Claude Compass has two parts: **THE WHAT** (the actual Claude skill) and **THE HOW** (real stories showing that skill solving a specific, recognizable problem). Pick whichever story feels closest to your own life. You don't need to read them in order, and you don't need to read every module in this course in order either. Start wherever you are.
+Every module in AmpEd has two parts: **THE WHAT** (the actual Claude skill) and **THE HOW** (real stories showing that skill solving a specific, recognizable problem). Pick whichever story feels closest to your own life. You don't need to read them in order, and you don't need to read every module in this course in order either. Start wherever you are.
 
 **By the end of this module, you'll be able to:** recognize when a long Claude Code session is getting overloaded, and know what auto-compact does about it.
 

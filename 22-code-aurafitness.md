@@ -1,10 +1,9 @@
-# Claude Compass
-## Claude Code
-### AuraFitness
-
+# AmpEd
+*amplify your ability to educate with Claude*
+## Claude Code → AuraFitness
 ---
 
-Every module in Claude Compass has two parts: **THE WHAT** (the actual Claude skill) and **THE HOW** (real stories showing that skill solving a specific, recognizable problem). Pick whichever story feels closest to your own life. You don't need to read them in order, and you don't need to read every module in this course in order either. Start wherever you are.
+Every module in AmpEd has two parts: **THE WHAT** (the actual Claude skill) and **THE HOW** (real stories showing that skill solving a specific, recognizable problem). Pick whichever story feels closest to your own life. You don't need to read them in order, and you don't need to read every module in this course in order either. Start wherever you are.
 
 **A note on this module:** like the last one, this is a single real, lived case study, not invented stories. AuraFitness is a real, full-stack web application, in daily classroom use, built with Claude Code.
 

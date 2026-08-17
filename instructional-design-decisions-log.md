@@ -1,4 +1,4 @@
-# Claude Compass — Instructional Design Decisions Log
+# AmpEd — Instructional Design Decisions Log
 
 *A running record of the instructional design decisions made while building this course, and the reasoning behind each one. Kept for portfolio use, interview talking points, and design-rationale documentation.*
 
@@ -98,20 +98,6 @@
 **Decision:** Departed from the "one module at a time, slowly" build philosophy to draft all 22 remaining modules in a single working session, ahead of a hard deadline for starting the Rise-to-custom-build transition in Claude Code the next day.
 **Reasoning:** The slow, one-at-a-time approach was chosen specifically because writing each module doubles as personal learning of the underlying Claude skill. That reasoning holds under normal circumstances, but a genuine external deadline changes the calculus: having complete, locked text ready meant the actual build session could be pure execution, no drafting decisions competing for attention with implementation decisions. This was treated as a deliberate, temporary exception to a standing rule, not an abandonment of it, the rule resumes for any future content work without a comparable deadline.
 **Portfolio talking point:** "I set a deliberate, personalized pace for this project because writing was part of how I was learning the material, but I could recognize when a real deadline justified a temporary exception, and executed a full-scope sprint without losing the format consistency or research rigor established in the pilot module."
-
----
-
-## Decision 16: Navigation metaphor, first build pass — Zoomable compass map over horizontal scroll rows
-**Decision:** Replaced the initial working build of the compass-metaphor navigation (three horizontally-scrollable branch cards, each opening a horizontally-scrollable row of module cards, per the original build-notes spec) with a literal zoomed-out map: three branches rendered as constellation clusters (a hub node with its modules as connected satellite nodes), starting fully zoomed out, that the learner clicks into. Clicking a branch zooms the whole map into that cluster; clicking a module then triggers a full-screen color "portal" transition (grows from the click point, covers the screen, swaps the route underneath, fades away) into that module's page, so the animation reads as physically diving into the map rather than a page navigating away.
-**Reasoning:** The original horizontal-scroll-row build was a reasonable literal reading of "compass navigation" but only reinforced the metaphor through card ordering, not through spatial logic, it still read as a conventional carousel UI. Re-approaching it as an actual map that starts zoomed out and physically zooms in on selection makes the "compass" idea structural rather than decorative: the learner's mental model becomes "I am looking at the whole territory and choosing where to go," which matches the course's core non-linear, choose-your-own-entry-point design decision far more directly than a scrollable list did. This was a build-phase revision requested after seeing the first working version, not a first-attempt guess, consistent with the standing plan to validate navigation ideas in a working build before locking them (see build-notes-ui-and-technical.md, "Horizontal scroll / swipe" section) — with this pass, the plan changed from validating horizontal scroll to superseding it once the alternative was seen live.
-**Portfolio talking point:** "The first build of the nav was a technically-correct implementation of the spec, but seeing it running made it obvious it wasn't actually earning the 'compass' name, it just alphabetized things a different direction. I rebuilt it as a literal zoomable map instead, which is a good example of a decision that's very hard to get right from a written spec alone and needed a working prototype in front of me before I could tell it was wrong."
-
----
-
-## Decision 17: THE WHAT / THE HOW boundary — Woven line motif instead of a plain divider
-**Decision:** On the module page, replaced the plain vertical border between THE WHAT and THE HOW panes (desktop split view) with an animated two-strand "braid" rendered in the branch's accent color plus a neutral ink tone, and added a matching horizontal version at the seam of the mobile slide-over panel.
-**Reasoning:** A plain border communicates "these are two separate things placed next to each other," which works against the locked instructional intent that THE WHAT and THE HOW are one continuous skill viewed two ways, not a concept followed by unrelated examples. A woven visual motif at exactly the boundary between them turns the dividing line itself into an argument for their unity, reinforcing the same relationship the content structure already encodes, rather than leaving that relationship to be inferred from proximity alone.
-**Portfolio talking point:** "Even a divider line is a design decision that can either support or undercut what the content is trying to say. I used the boundary between the two halves of a module to visually argue that they're the same idea, not two adjacent ones."
 
 ---
 

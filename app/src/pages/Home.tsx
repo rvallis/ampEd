@@ -70,19 +70,20 @@ export default function Home() {
           className="text-xs font-semibold uppercase tracking-[0.2em] mb-2"
           style={{ color: "var(--ink-soft)" }}
         >
-          🧭 Claude Compass
+          🧭 AmpEd
         </p>
         <h1
           className="text-2xl md:text-4xl font-bold tracking-tight"
           style={{ color: "var(--ink)" }}
         >
-          Start wherever you are.
+          Amplify your ability to educate with Claude.
         </h1>
         <p
           className="mt-2 text-xs md:text-sm max-w-md mx-auto"
           style={{ color: "var(--ink-soft)" }}
         >
-          One idea, three ways in. Click a branch to zoom in, click a module
+          Start wherever you are. One idea, three ways in. Click a branch to
+          zoom in, click a module
           to dive in.
         </p>
       </motion.header>

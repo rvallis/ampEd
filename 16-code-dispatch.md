@@ -1,10 +1,9 @@
-# Claude Compass
-## Claude Code & Cowork
-### Dispatch
-
+# AmpEd
+*amplify your ability to educate with Claude*
+## Claude Code & Cowork → Dispatch
 ---
 
-Every module in Claude Compass has two parts: **THE WHAT** (the actual Claude skill) and **THE HOW** (real stories showing that skill solving a specific, recognizable problem). Pick whichever story feels closest to your own life. You don't need to read them in order, and you don't need to read every module in this course in order either. Start wherever you are.
+Every module in AmpEd has two parts: **THE WHAT** (the actual Claude skill) and **THE HOW** (real stories showing that skill solving a specific, recognizable problem). Pick whichever story feels closest to your own life. You don't need to read them in order, and you don't need to read every module in this course in order either. Start wherever you are.
 
 **A note on where this module lives:** Dispatch bridges Cowork and Claude Code rather than belonging cleanly to either one, since it's really about starting agentic work from your phone, not a chat conversation. It's placed here, but relevant no matter which branch brought you to it.
 

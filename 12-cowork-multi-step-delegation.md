@@ -1,10 +1,9 @@
-# Claude Compass
-## Cowork
-### Multi-Step Task Delegation
-
+# AmpEd
+*amplify your ability to educate with Claude*
+## Cowork → Multi-Step Task Delegation
 ---
 
-Every module in Claude Compass has two parts: **THE WHAT** (the actual Claude skill) and **THE HOW** (real stories showing that skill solving a specific, recognizable problem). Pick whichever story feels closest to your own life. You don't need to read them in order, and you don't need to read every module in this course in order either. Start wherever you are.
+Every module in AmpEd has two parts: **THE WHAT** (the actual Claude skill) and **THE HOW** (real stories showing that skill solving a specific, recognizable problem). Pick whichever story feels closest to your own life. You don't need to read them in order, and you don't need to read every module in this course in order either. Start wherever you are.
 
 **By the end of this module, you'll be able to:** hand Claude a whole multi-step task in one instruction, and get a finished result back, instead of directing every individual step yourself.
 

@@ -1,10 +1,9 @@
-# Claude Compass
-## Cowork
-### Connectors
-
+# AmpEd
+*amplify your ability to educate with Claude*
+## Cowork → Connectors
 ---
 
-Every module in Claude Compass has two parts: **THE WHAT** (the actual Claude skill) and **THE HOW** (real stories showing that skill solving a specific, recognizable problem). Pick whichever story feels closest to your own life. You don't need to read them in order, and you don't need to read every module in this course in order either. Start wherever you are.
+Every module in AmpEd has two parts: **THE WHAT** (the actual Claude skill) and **THE HOW** (real stories showing that skill solving a specific, recognizable problem). Pick whichever story feels closest to your own life. You don't need to read them in order, and you don't need to read every module in this course in order either. Start wherever you are.
 
 A note on this branch: Cowork isn't classroom-facing, it's practice-facing. This branch is built for anyone running their own work, freelancers, consultants, instructional designers, small business owners, not for managing a room of students.
 

@@ -22,15 +22,6 @@ export default function Home() {
   const { zoomInto } = useZoomTransition();
   const layout = useMapLayout();
 
-  const centroid = {
-    x:
-      (layout.anchors.chat.x + layout.anchors.cowork.x + layout.anchors.code.x) /
-      3,
-    y:
-      (layout.anchors.chat.y + layout.anchors.cowork.y + layout.anchors.code.y) /
-      3,
-  };
-
   // Re-center the zoomed anchor at viewport-middle rather than just scaling
   // around it in place (which would push anything left/above the anchor
   // off-screen). transform-origin stays pinned at 0,0 so these percentages
@@ -122,49 +113,6 @@ export default function Home() {
           preserveAspectRatio="xMidYMid meet"
           className="w-full h-full select-none"
         >
-          {/* faint compass rose at centroid */}
-          <motion.g
-            animate={{ opacity: zoomed ? 0 : 0.5 }}
-            transition={{ duration: 0.3 }}
-          >
-            <circle
-              cx={centroid.x}
-              cy={centroid.y}
-              r={3}
-              fill="none"
-              stroke="var(--border)"
-              strokeWidth={0.3}
-            />
-            {[0, 90, 180, 270].map((deg) => {
-              const rad = (deg * Math.PI) / 180;
-              const x2 = centroid.x + Math.cos(rad) * 5;
-              const y2 = centroid.y + Math.sin(rad) * 5;
-              return (
-                <line
-                  key={deg}
-                  x1={centroid.x}
-                  y1={centroid.y}
-                  x2={x2}
-                  y2={y2}
-                  stroke="var(--border)"
-                  strokeWidth={0.3}
-                />
-              );
-            })}
-          </motion.g>
-
-          {/* triangle linking the three branches */}
-          <motion.polygon
-            points={BRANCH_ORDER.map(
-              (b) => `${layout.anchors[b].x},${layout.anchors[b].y}`
-            ).join(" ")}
-            fill="none"
-            stroke="var(--border)"
-            strokeWidth={0.25}
-            animate={{ opacity: zoomed ? 0.03 : 0.5 }}
-            transition={{ duration: 0.3 }}
-          />
-
           {BRANCH_ORDER.map((branch) => (
             <BranchCluster
               key={branch}

@@ -54,6 +54,24 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+@keyframes compass-twinkle {
+  0%,
+  100% {
+    opacity: 0.15;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.6);
+  }
+}
+
+@keyframes compass-braid-flow {
+  to {
+    stroke-dashoffset: -48;
+  }
+}
+
 /* horizontal scroll rows: snap, no visible scrollbar */
 .scroll-row {
   scroll-snap-type: x mandatory;

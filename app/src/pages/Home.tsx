@@ -1,23 +1,71 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import { BRANCH_META, BRANCH_ORDER, modulesByBranch } from "../content/modules";
-import ScrollRow from "../components/ScrollRow";
+import { moduleNodes, type MapLayout } from "../content/mapLayout";
+import { useMapLayout } from "../hooks/useMapLayout";
+import Starfield from "../components/Starfield";
+import { useZoomTransition } from "../transition/ZoomTransition";
 import type { BranchSlug } from "../types/content";
 
-const ACCENT: Record<BranchSlug, { fg: string; bg: string; border: string }> = {
-  chat: { fg: "var(--chat)", bg: "var(--chat-bg)", border: "var(--chat)" },
-  cowork: { fg: "var(--cowork)", bg: "var(--cowork-bg)", border: "var(--cowork)" },
-  code: { fg: "var(--code)", bg: "var(--code-bg)", border: "var(--code)" },
+const ACCENT: Record<BranchSlug, string> = {
+  chat: "var(--chat)",
+  cowork: "var(--cowork)",
+  code: "var(--code)",
 };
 
+const ZOOM = 1.9;
+
 export default function Home() {
-  const [active, setActive] = useState<BranchSlug>("chat");
+  const [zoomed, setZoomed] = useState<BranchSlug | null>(null);
   const navigate = useNavigate();
-  const accent = ACCENT[active];
+  const { zoomInto } = useZoomTransition();
+  const layout = useMapLayout();
+
+  const centroid = {
+    x:
+      (layout.anchors.chat.x + layout.anchors.cowork.x + layout.anchors.code.x) /
+      3,
+    y:
+      (layout.anchors.chat.y + layout.anchors.cowork.y + layout.anchors.code.y) /
+      3,
+  };
+
+  // Re-center the zoomed anchor at viewport-middle rather than just scaling
+  // around it in place (which would push anything left/above the anchor
+  // off-screen). transform-origin stays pinned at 0,0 so these percentages
+  // (which resolve against the element's own untransformed box, per the
+  // CSS transform spec) land the anchor dead center after scaling.
+  const targetXPercent = zoomed ? (layout.anchors[zoomed].x / layout.width) * 100 : 0;
+  const targetYPercent = zoomed ? (layout.anchors[zoomed].y / layout.height) * 100 : 0;
+  const mapX = zoomed ? `${50 - targetXPercent * ZOOM}%` : "0%";
+  const mapY = zoomed ? `${50 - targetYPercent * ZOOM}%` : "0%";
+
+  const diveIntoModule = (
+    branch: BranchSlug,
+    slug: string,
+    e: React.MouseEvent
+  ) => {
+    const xPercent = (e.clientX / window.innerWidth) * 100;
+    const yPercent = (e.clientY / window.innerHeight) * 100;
+    zoomInto({ xPercent, yPercent, color: ACCENT[branch] }, () =>
+      navigate(`/${branch}/${slug}`)
+    );
+  };
 
   return (
-    <div className="min-h-svh flex flex-col" style={{ background: "var(--paper)" }}>
-      <header className="px-6 pt-10 pb-4 text-center">
+    <div
+      className="relative w-full h-svh overflow-hidden"
+      style={{ background: "var(--paper)" }}
+    >
+      <Starfield />
+
+      {/* title, recedes when zoomed */}
+      <motion.header
+        className="absolute top-0 inset-x-0 z-10 px-6 pt-8 text-center pointer-events-none"
+        animate={{ opacity: zoomed ? 0 : 1, y: zoomed ? -16 : 0 }}
+        transition={{ duration: 0.35 }}
+      >
         <p
           className="text-xs font-semibold uppercase tracking-[0.2em] mb-2"
           style={{ color: "var(--ink-soft)" }}
@@ -25,98 +73,242 @@ export default function Home() {
           🧭 Claude Compass
         </p>
         <h1
-          className="text-3xl md:text-4xl font-bold tracking-tight"
+          className="text-2xl md:text-4xl font-bold tracking-tight"
           style={{ color: "var(--ink)" }}
         >
           Start wherever you are.
         </h1>
         <p
-          className="mt-2 text-sm md:text-base max-w-xl mx-auto"
+          className="mt-2 text-xs md:text-sm max-w-md mx-auto"
           style={{ color: "var(--ink-soft)" }}
         >
-          Every module stands on its own, zero assumed prior knowledge.
-          Pick a branch, then a module. Swipe or click through.
+          One idea, three ways in. Click a branch to zoom in, click a module
+          to dive in.
         </p>
-      </header>
+      </motion.header>
 
-      {/* branch level */}
-      <section className="px-6 mt-4">
-        <ScrollRow>
-          {BRANCH_ORDER.map((b) => {
-            const meta = BRANCH_META[b];
-            const a = ACCENT[b];
-            const isActive = b === active;
-            return (
-              <button
-                key={b}
-                onClick={() => setActive(b)}
-                className="scroll-snap-item shrink-0 w-[260px] md:w-[300px] text-left rounded-2xl border-2 p-5 transition-transform"
-                style={{
-                  borderColor: isActive ? a.border : "var(--border)",
-                  background: isActive ? a.bg : "var(--paper-raised)",
-                  transform: isActive ? "translateY(-2px)" : "none",
-                }}
-              >
-                <p
-                  className="text-xs font-semibold uppercase tracking-widest mb-1"
-                  style={{ color: a.fg }}
-                >
-                  {modulesByBranch(b).length} modules
-                </p>
-                <h2
-                  className="text-xl font-bold mb-1"
-                  style={{ color: "var(--ink)" }}
-                >
-                  {meta.name}
-                </h2>
-                <p className="text-sm" style={{ color: "var(--ink-soft)" }}>
-                  {meta.blurb}
-                </p>
-              </button>
-            );
-          })}
-        </ScrollRow>
-      </section>
+      {/* back-to-map control */}
+      <AnimatePresence>
+        {zoomed && (
+          <motion.button
+            key="back"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            onClick={() => setZoomed(null)}
+            className="absolute top-5 left-5 z-20 h-11 w-11 rounded-full border flex items-center justify-center text-lg"
+            style={{
+              borderColor: "var(--border)",
+              background: "var(--paper-raised)",
+              color: "var(--ink)",
+            }}
+            aria-label="Zoom back out to the full map"
+          >
+            🧭
+          </motion.button>
+        )}
+      </AnimatePresence>
 
-      {/* module level, for the active branch */}
-      <section className="px-6 mt-6 flex-1">
-        <p className="text-sm mb-1" style={{ color: "var(--ink-soft)" }}>
-          {BRANCH_META[active].audience}
-        </p>
-        <ScrollRow>
-          {modulesByBranch(active).map((m) => (
-            <button
-              key={m.slug}
-              onClick={() => navigate(`/${m.branch}/${m.slug}`)}
-              className="scroll-snap-item shrink-0 w-[240px] md:w-[280px] text-left rounded-2xl border p-5 hover:-translate-y-0.5 transition-transform"
-              style={{
-                borderColor: "var(--border)",
-                background: "var(--paper-raised)",
-              }}
-            >
-              <p
-                className="text-[11px] font-semibold uppercase tracking-widest mb-2"
-                style={{ color: accent.fg }}
-              >
-                {m.title}
-              </p>
-              <p
-                className="text-base font-bold leading-snug"
-                style={{ color: "var(--ink)" }}
-              >
-                {m.what.hook}
-              </p>
-            </button>
+      {/* the map */}
+      <motion.div
+        className="absolute inset-0"
+        style={{ transformOrigin: "0 0" }}
+        animate={{ x: mapX, y: mapY, scale: zoomed ? ZOOM : 1 }}
+        transition={{ duration: 0.65, ease: [0.65, 0, 0.35, 1] }}
+      >
+        <svg
+          viewBox={`0 0 ${layout.width} ${layout.height}`}
+          preserveAspectRatio="xMidYMid meet"
+          className="w-full h-full select-none"
+        >
+          {/* faint compass rose at centroid */}
+          <motion.g
+            animate={{ opacity: zoomed ? 0 : 0.5 }}
+            transition={{ duration: 0.3 }}
+          >
+            <circle
+              cx={centroid.x}
+              cy={centroid.y}
+              r={3}
+              fill="none"
+              stroke="var(--border)"
+              strokeWidth={0.3}
+            />
+            {[0, 90, 180, 270].map((deg) => {
+              const rad = (deg * Math.PI) / 180;
+              const x2 = centroid.x + Math.cos(rad) * 5;
+              const y2 = centroid.y + Math.sin(rad) * 5;
+              return (
+                <line
+                  key={deg}
+                  x1={centroid.x}
+                  y1={centroid.y}
+                  x2={x2}
+                  y2={y2}
+                  stroke="var(--border)"
+                  strokeWidth={0.3}
+                />
+              );
+            })}
+          </motion.g>
+
+          {/* triangle linking the three branches */}
+          <motion.polygon
+            points={BRANCH_ORDER.map(
+              (b) => `${layout.anchors[b].x},${layout.anchors[b].y}`
+            ).join(" ")}
+            fill="none"
+            stroke="var(--border)"
+            strokeWidth={0.25}
+            animate={{ opacity: zoomed ? 0.03 : 0.5 }}
+            transition={{ duration: 0.3 }}
+          />
+
+          {BRANCH_ORDER.map((branch) => (
+            <BranchCluster
+              key={branch}
+              branch={branch}
+              layout={layout}
+              dimmed={zoomed !== null && zoomed !== branch}
+              zoomed={zoomed === branch}
+              onSelectBranch={() => setZoomed(branch)}
+              onSelectModule={(slug, e) => diveIntoModule(branch, slug, e)}
+            />
           ))}
-        </ScrollRow>
-      </section>
+        </svg>
+      </motion.div>
 
       <footer
-        className="px-6 py-6 text-center text-xs"
+        className="absolute bottom-0 inset-x-0 px-6 py-5 text-center text-xs pointer-events-none"
         style={{ color: "var(--ink-soft)" }}
       >
-        Claude Chat · Cowork · Claude Code — one idea, three ways in.
+        Claude Chat · Cowork · Claude Code
       </footer>
     </div>
+  );
+}
+
+function BranchCluster({
+  branch,
+  layout,
+  dimmed,
+  zoomed,
+  onSelectBranch,
+  onSelectModule,
+}: {
+  branch: BranchSlug;
+  layout: MapLayout;
+  dimmed: boolean;
+  zoomed: boolean;
+  onSelectBranch: () => void;
+  onSelectModule: (slug: string, e: React.MouseEvent) => void;
+}) {
+  const anchor = layout.anchors[branch];
+  const nodes = moduleNodes(branch, layout);
+  const mods = modulesByBranch(branch);
+  const accent = ACCENT[branch];
+
+  return (
+    <motion.g
+      animate={{ opacity: dimmed ? 0.07 : 1 }}
+      transition={{ duration: 0.35 }}
+    >
+      {/* spokes */}
+      {nodes.map((n) => (
+        <line
+          key={n.slug}
+          x1={anchor.x}
+          y1={anchor.y}
+          x2={n.x}
+          y2={n.y}
+          stroke={accent}
+          strokeWidth={0.25}
+          opacity={0.5}
+        />
+      ))}
+
+      {/* module nodes */}
+      {nodes.map((n, i) => {
+        const angleRight = Math.cos((n.angleDeg * Math.PI) / 180) >= 0;
+        const mod = mods[i];
+        return (
+          <g
+            key={n.slug}
+            onClick={(e) => onSelectModule(n.slug, e)}
+            style={{ cursor: "pointer" }}
+          >
+            <circle cx={n.x} cy={n.y} r={2.6} fill="transparent" />
+            <motion.circle
+              cx={n.x}
+              cy={n.y}
+              r={1.1}
+              fill={accent}
+              whileHover={{ scale: 1.6 }}
+              style={{ transformOrigin: `${n.x}px ${n.y}px` }}
+            />
+            <AnimatePresence>
+              {zoomed && (
+                <motion.text
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ delay: i * 0.025, duration: 0.25 }}
+                  x={n.x + (angleRight ? 2.2 : -2.2)}
+                  y={n.y + 0.6}
+                  textAnchor={angleRight ? "start" : "end"}
+                  fontSize={2.3}
+                  fontWeight={600}
+                  fill="var(--ink)"
+                  style={{ pointerEvents: "none" }}
+                >
+                  {mod.title.length > 22
+                    ? `${mod.title.slice(0, 21)}…`
+                    : mod.title}
+                </motion.text>
+              )}
+            </AnimatePresence>
+          </g>
+        );
+      })}
+
+      {/* branch anchor */}
+      <g
+        onClick={onSelectBranch}
+        style={{ cursor: zoomed ? "default" : "pointer" }}
+      >
+        <circle cx={anchor.x} cy={anchor.y} r={6} fill="transparent" />
+        <motion.circle
+          cx={anchor.x}
+          cy={anchor.y}
+          r={2.4}
+          fill={accent}
+          animate={{ scale: [1, 1.12, 1] }}
+          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+          style={{ transformOrigin: `${anchor.x}px ${anchor.y}px` }}
+        />
+        <text
+          x={anchor.x}
+          y={anchor.y - 4.2}
+          textAnchor="middle"
+          fontSize={zoomed ? 5.2 : 4}
+          fontWeight={700}
+          fill="var(--ink)"
+          style={{ transition: "font-size 0.3s" }}
+        >
+          {BRANCH_META[branch].name}
+        </text>
+        {!zoomed && (
+          <text
+            x={anchor.x}
+            y={anchor.y + 8.5}
+            textAnchor="middle"
+            fontSize={2.2}
+            fill="var(--ink-soft)"
+          >
+            {mods.length} modules
+          </text>
+        )}
+      </g>
+    </motion.g>
   );
 }

@@ -1,9 +1,11 @@
 import { useRef, useState } from "react";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
+import { motion } from "framer-motion";
 import { adjacentModule, getModule } from "../content/modules";
 import type { BranchSlug } from "../types/content";
 import WhatPane from "../components/WhatPane";
 import HowPane from "../components/HowPane";
+import Braid from "../components/Braid";
 
 const ACCENT: Record<BranchSlug, { fg: string; bg: string }> = {
   chat: { fg: "var(--chat)", bg: "var(--chat-bg)" },
@@ -41,7 +43,13 @@ export default function ModulePage() {
   };
 
   return (
-    <div className="h-svh flex flex-col" style={{ background: "var(--paper)" }}>
+    <motion.div
+      className="h-svh flex flex-col"
+      style={{ background: "var(--paper)" }}
+      initial={{ opacity: 0, scale: 0.97 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.35, ease: "easeOut" }}
+    >
       {/* top bar */}
       <header
         className="h-16 shrink-0 flex items-center gap-2 md:gap-3 px-3 md:px-6 border-b"
@@ -107,15 +115,13 @@ export default function ModulePage() {
 
       {/* content */}
       <div className="flex-1 min-h-0 relative">
-        {/* desktop: independently-scrollable side by side panes */}
-        <div className="hidden md:grid md:grid-cols-2 h-full">
-          <div
-            className="h-full overflow-y-auto border-r"
-            style={{ borderColor: "var(--border)" }}
-          >
+        {/* desktop: independently-scrollable side by side panes, woven together */}
+        <div className="hidden md:flex h-full">
+          <div className="flex-1 h-full overflow-y-auto">
             <WhatPane module={module} accent={accent.fg} />
           </div>
-          <div className="h-full overflow-y-auto">
+          <Braid colorA={accent.fg} colorB="var(--ink-soft)" />
+          <div className="flex-1 h-full overflow-y-auto">
             <HowPane module={module} accent={accent.fg} accentBg={accent.bg} />
           </div>
         </div>
@@ -142,11 +148,12 @@ export default function ModulePage() {
               ← Back to THE WHAT
             </button>
           </div>
-          <div className="h-[calc(100%-3rem)] overflow-y-auto">
+          <Braid colorA={accent.fg} colorB="var(--ink-soft)" orientation="horizontal" />
+          <div className="h-[calc(100%-3rem-1rem)] overflow-y-auto">
             <HowPane module={module} accent={accent.fg} accentBg={accent.bg} />
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

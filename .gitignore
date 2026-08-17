@@ -4,3 +4,4 @@ app/src/content/modules.json
 app/.oxlintrc.json.cache
 .DS_Store
 *.log
+.claude/scheduled_tasks.lock

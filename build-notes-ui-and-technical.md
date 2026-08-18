@@ -69,13 +69,25 @@
 
 **What it is:** every icon-sized interactive control on the compass map and module page is drawn from a small number of twinkling star points connected by thin faint lines, tracing the shape of whatever it represents, rather than using an emoji or a plain SVG glyph. Currently: the prev/next module arrows (`ConstellationArrow.tsx`, three points forming a chevron), and the home/back button (`ConstellationHouse.tsx`, five points tracing a house outline). Both share the same 8-point sparkle path and the same per-point staggered opacity twinkle.
 
-The same 8-point sparkle also appears as a bare typographic accent, not tracing any shape, in `TwinkleText.tsx`: a couple of individual letters in the overview headline ("Amplify Your Ability to Educate") and in the branch name that takes over that slot when zoomed in each get one small twinkling star pinned to their corner. Kept deliberately sparse (2-3 letters, never every letter, never every word) so it still reads as clean and professional rather than decorated — the ask that prompted it was explicit about keeping it that way.
-
 **Why:** it's the one piece of visual identity that ties every interactive chrome element back to the starfield/compass theme, rather than having navigation controls feel like generic UI bolted onto a themed background. It's also a direct, deliberate rejection of using an actual home/arrow emoji for these two specific controls, after the person asked for the change explicitly.
 
-**Standing rule:** if a new small icon-sized control gets added later (not full illustrations, this doesn't apply to the deferred visuals system in the Visuals section below), default to this same technique for consistency rather than reaching for an emoji or a stock icon set. Same for any future headline/title-sized text accent: reuse `TwinkleText.tsx`'s sparse-letter-twinkle approach rather than inventing a second sparkle style, and keep the letter count low.
+**Standing rule:** if a new small icon-sized control gets added later (not full illustrations, this doesn't apply to the deferred visuals system in the Visuals section below), default to this same technique for consistency rather than reaching for an emoji or a stock icon set. This is a distinct technique from the headline star-twinkle below — that one reuses the *background* starfield's dot look, not this section's sparkle-icon shape; don't conflate the two when extending either.
 
-**Status:** implemented (`app/src/components/ConstellationArrow.tsx`, `ConstellationHouse.tsx`, `app/src/components/TwinkleText.tsx`).
+**Status:** implemented (`app/src/components/ConstellationArrow.tsx`, `ConstellationHouse.tsx`).
+
+---
+
+## Headline twinkle: the background stars showing through the letters
+
+**What it is:** the overview headline ("Amplify Your Ability to Educate") and the branch name that takes over that same slot when zoomed in both have a handful of small dots twinkling on top of them — the same round dot, same color (`var(--ink-soft)`), and the same opacity curve as the ambient starfield behind the whole map (`Starfield.tsx`), not the constellation sparkle-icon shape used for nav controls above. The dots are confined strictly to the letters themselves: nothing is ever visible floating beside, above, or between the words.
+
+**How it's built (`TwinkleTitle.tsx`):** two copies of the title text sit stacked in the same CSS grid cell, so they're pixel-identical, including how they wrap on a narrow phone. The bottom copy is the real, solid, fully legible title, unaffected by any of this. Each layer above it is the same text again, but transparent everywhere except for a few small `radial-gradient` dots, using `background-clip: text` so the dots only paint where the browser's own font rendering finds glyph ink — gaps between letters and words have nothing to clip to, so a dot placed there is simply invisible. Three layers with staggered timing (each animating opacity only, via a new `compass-twinkle-fade` keyframe — the background starfield's `compass-twinkle` also scales the dot, which reads fine at 1-2px but would visibly zoom a whole text-sized layer) fake the look of several independently twinkling stars without animating each dot separately.
+
+**Why this shape and not the icon-language sparkle:** the explicit ask was for the *same stars as the background*, shining through the font itself, not a second decorative sparkle style layered near it — an earlier attempt using the constellation 8-point sparkle, positioned beside individual letters, missed that: it read as a separate accent floating near the text rather than the text itself twinkling, and looked inconsistent against the round dots already covering the rest of the page.
+
+**Standing rule:** any future "stars in a headline" treatment should extend `TwinkleTitle.tsx` (add layers/dots, don't restyle the dot itself) rather than reaching for the constellation sparkle shape — the two techniques read as different materials (the icon language traces a *shape* out of stars; this one is stars showing through solid *text*) and shouldn't be mixed on the same element.
+
+**Status:** implemented (`app/src/components/TwinkleTitle.tsx`, `app/src/index.css`'s `compass-twinkle-fade` keyframe). Scope: the two page-level titles only (overview headline, zoomed branch name) — the 22 small module title labels on the map are untouched.
 
 ---
 

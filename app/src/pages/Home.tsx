@@ -82,6 +82,20 @@ export default function Home() {
         </h1>
       </motion.header>
 
+      {/* zoomed branch's name takes over that same top slot */}
+      <motion.div
+        className="absolute top-0 inset-x-0 z-10 px-6 pt-10 text-center pointer-events-none"
+        animate={{ opacity: zoomed ? 1 : 0, y: zoomed ? 0 : -16 }}
+        transition={{ duration: 0.35 }}
+      >
+        <h1
+          className="text-2xl md:text-4xl font-bold tracking-tight"
+          style={{ color: "var(--ink)" }}
+        >
+          {zoomed ? BRANCH_META[zoomed].name : ""}
+        </h1>
+      </motion.div>
+
       {/* back-to-map control */}
       <AnimatePresence>
         {zoomed && (
@@ -116,15 +130,6 @@ export default function Home() {
           preserveAspectRatio="xMidYMid meet"
           className="w-full h-full select-none"
         >
-          <defs>
-            <filter id="star-glow" x="-60%" y="-60%" width="220%" height="220%">
-              <feGaussianBlur stdDeviation="0.35" result="blur" />
-              <feMerge>
-                <feMergeNode in="blur" />
-                <feMergeNode in="SourceGraphic" />
-              </feMerge>
-            </filter>
-          </defs>
           {BRANCH_ORDER.map((branch) => (
             <BranchCluster
               key={branch}
@@ -194,8 +199,7 @@ function BranchCluster({
       {nodes.map((n, i) => {
         const angleRight = Math.cos((n.angleDeg * Math.PI) / 180) >= 0;
         const mod = mods[i];
-        const isHoverPreview = !zoomed && hovered === n.slug;
-        const showLabel = zoomed || isHoverPreview;
+        const showLabel = zoomed || hovered === n.slug;
         const label =
           mod.title.length > 22 ? `${mod.title.slice(0, 21)}…` : mod.title;
         const labelX = n.x + (angleRight ? 2.2 : -2.2);
@@ -219,37 +223,26 @@ function BranchCluster({
               style={{ transformOrigin: `${n.x}px ${n.y}px` }}
             />
 
-            {/* title floats free, no background, twinkling like starlight.
-                Outer g handles mount/unmount fade; inner text runs its own
-                endless twinkle loop, independent of that fade. */}
+            {/* title floats free, no background, crisp and always the same
+                style whether it's a hover preview or the always-on
+                zoomed-in label */}
             <AnimatePresence>
               {showLabel && (
-                <motion.g
+                <motion.text
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ delay: i * 0.025, duration: 0.25 }}
+                  x={labelX}
+                  y={n.y + 0.6}
+                  textAnchor={angleRight ? "start" : "end"}
+                  fontSize={1.7}
+                  fontWeight={600}
+                  fill="var(--ink)"
                   style={{ pointerEvents: "none" }}
                 >
-                  <motion.text
-                    x={labelX}
-                    y={n.y + 0.6}
-                    textAnchor={angleRight ? "start" : "end"}
-                    fontSize={isHoverPreview ? 1.7 : 2.3}
-                    fontWeight={600}
-                    fill={isHoverPreview ? "var(--ink)" : accent}
-                    filter="url(#star-glow)"
-                    animate={{ opacity: [0.55, 1, 0.55] }}
-                    transition={{
-                      duration: 2.2 + (i % 3) * 0.5,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                      delay: i * 0.15,
-                    }}
-                  >
-                    {label}
-                  </motion.text>
-                </motion.g>
+                  {label}
+                </motion.text>
               )}
             </AnimatePresence>
           </g>
@@ -268,17 +261,18 @@ function BranchCluster({
           transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
           style={{ transformOrigin: `${anchor.x}px ${anchor.y}px` }}
         />
-        <text
-          x={anchor.x}
-          y={anchor.y - 4.2}
-          textAnchor="middle"
-          fontSize={zoomed ? 5.2 : 4}
-          fontWeight={700}
-          fill="var(--ink)"
-          style={{ transition: "font-size 0.3s" }}
-        >
-          {BRANCH_META[branch].name}
-        </text>
+        {!zoomed && (
+          <text
+            x={anchor.x}
+            y={anchor.y - 4.2}
+            textAnchor="middle"
+            fontSize={4}
+            fontWeight={700}
+            fill="var(--ink)"
+          >
+            {BRANCH_META[branch].name}
+          </text>
+        )}
       </g>
     </motion.g>
   );

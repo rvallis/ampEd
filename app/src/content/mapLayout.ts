@@ -25,14 +25,18 @@ export const LANDSCAPE_LAYOUT: MapLayout = {
 
 /** Portrait layout: three branches stacked top-to-bottom instead of
  * triangulated, since a wide triangle wastes most of a tall, narrow
- * screen (phones). */
+ * screen (phones). Anchors sit 26 units lower than a bare vertical
+ * three-way split would put them, clearing room at the top for the
+ * headline/branch-name text that overlays the map — without that
+ * offset, the chat cluster's topmost node collides with the two-line
+ * headline on narrow screens. */
 export const PORTRAIT_LAYOUT: MapLayout = {
   width: 100,
-  height: 170,
+  height: 196,
   anchors: {
-    chat: { x: 50, y: 34 },
-    cowork: { x: 50, y: 88 },
-    code: { x: 50, y: 142 },
+    chat: { x: 50, y: 60 },
+    cowork: { x: 50, y: 114 },
+    code: { x: 50, y: 168 },
   },
   ringRadius: { chat: 21, cowork: 18, code: 23 },
   startAngle: { chat: -100, cowork: -70, code: -95 },

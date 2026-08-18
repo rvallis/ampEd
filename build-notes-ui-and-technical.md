@@ -18,6 +18,18 @@
 
 ---
 
+### Portrait map: top clearance for the overlaid headline
+
+**What it is:** on the compass map's portrait/mobile layout (`PORTRAIT_LAYOUT` in `mapLayout.ts`), the three branch anchors sit 26 viewBox units lower than a bare even three-way vertical split would place them, and the layout's total height grows by the same amount to keep the spacing between clusters unchanged. Cowork and Claude Code shift down by the same 26 units as Chat, so the whole stack moves as a block rather than compressing.
+
+**Why:** the headline ("Amplify Your Ability to Educate" on the overview, the zoomed branch name in that same slot) is an absolutely-positioned overlay on top of the map, not part of the SVG's own coordinate space. On a narrow phone screen the headline wraps to two lines and, without this offset, its text runs directly through the Claude Chat cluster's topmost node and spoke — first reported as a real overlap on a live phone screenshot, not a hypothetical.
+
+**Standing rule:** any future change to the portrait layout's vertical rhythm (adding a fourth branch, rebalancing ring radii, etc.) needs to keep this top offset, or re-verify against a real narrow-screen screenshot that the topmost node of the first cluster still clears the two-line headline zone.
+
+**Status:** implemented (`app/src/content/mapLayout.ts`, `PORTRAIT_LAYOUT`). Landscape layout is unaffected — the headline sits well clear of the triangulated desktop layout already.
+
+---
+
 ## Layout: THE WHAT / THE HOW split view
 
 **Problem it solves:** a learner reading a HOW story often wants to jump back and re-check something specific in THE WHAT (e.g. "what did WHO actually mean again?") without losing their scroll position in the story they were reading.

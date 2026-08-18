@@ -1,5 +1,5 @@
 # AmpEd
-*amplify your ability to educate*
+*Amplify Your Ability to Educate*
 ## Cowork → Email and Calendar Management
 ---
 

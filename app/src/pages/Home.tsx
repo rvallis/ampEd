@@ -19,7 +19,6 @@ const ZOOM = 1.9;
 
 export default function Home() {
   const [zoomed, setZoomed] = useState<BranchSlug | null>(null);
-  const [burstNonce, setBurstNonce] = useState<number | null>(null);
   const navigate = useNavigate();
   const { zoomInto } = useZoomTransition();
   const layout = useMapLayout();
@@ -34,11 +33,8 @@ export default function Home() {
   const mapX = zoomed ? `${50 - targetXPercent * ZOOM}%` : "0%";
   const mapY = zoomed ? `${50 - targetYPercent * ZOOM}%` : "0%";
 
-  const triggerBurst = () => setBurstNonce(Date.now());
-
   const selectBranch = (branch: BranchSlug, e: React.MouseEvent) => {
     void e;
-    triggerBurst();
     setZoomed(branch);
   };
 
@@ -47,7 +43,6 @@ export default function Home() {
     slug: string,
     e: React.MouseEvent
   ) => {
-    triggerBurst();
     const xPercent = (e.clientX / window.innerWidth) * 100;
     const yPercent = (e.clientY / window.innerHeight) * 100;
     zoomInto({ xPercent, yPercent, color: ACCENT[branch] }, () =>
@@ -60,7 +55,7 @@ export default function Home() {
       className="relative w-full h-svh overflow-hidden"
       style={{ background: "var(--paper)" }}
     >
-      <Starfield burstNonce={burstNonce} />
+      <Starfield />
 
       {/* headline, recedes when zoomed */}
       <motion.header

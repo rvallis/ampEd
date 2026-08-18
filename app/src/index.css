@@ -72,21 +72,6 @@ body {
   }
 }
 
-@keyframes star-streak {
-  0% {
-    width: 1.5px;
-    opacity: 1;
-  }
-  60% {
-    width: var(--burst-len);
-    opacity: 1;
-  }
-  100% {
-    width: var(--burst-len);
-    opacity: 0;
-  }
-}
-
 /* horizontal scroll rows: snap, no visible scrollbar */
 .scroll-row {
   scroll-snap-type: x mandatory;

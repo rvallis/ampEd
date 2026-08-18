@@ -30,6 +30,20 @@
 
 ---
 
+### Zoomed branch view: module labels running off the screen edge
+
+**What it is:** when a branch is zoomed into on a narrow phone, all of that branch's module labels are visible at once (not just one on hover), and the ones pointing closest to due left or right were running off the edge of the screen — reported from a live phone screenshot on Claude Code, Claude Chat, and Cowork alike. Two changes fixed it: the zoom-in scale dropped from 1.9x to 1.5x (`ZOOM` in `Home.tsx`), and zoomed-in label truncation became angle-aware instead of a flat character count.
+
+**Why angle-aware, not just a shorter flat limit:** a node pointing straight up or down from its branch hub has much more horizontal room for its label than one pointing straight out sideways, which already spends most of the available width just reaching its own position. A flat character cap has to be conservative enough for the worst-angle node, which needlessly chops labels that had room to spare (confirmed while testing: a blanket 16-character cap was still clipping "Interview-Me Prompting" at an almost-due-left angle while needlessly truncating "Prompting Fundamentals," which points nearly straight up and had plenty of room). `zoomedLabelBudget()` in `Home.tsx` instead computes, per node, how much of the zoomed-in visible width is left after that node's own radial distance, and sizes the truncation to that.
+
+**How it was verified:** this one was checked against a real render, not eyeballed from the numbers. With dependencies installed and a Vite dev server running locally, Playwright (pointed at this environment's pre-installed Chromium at `/opt/pw-browsers/chromium`) drove a real browser to zoom into each of the three branches at a phone viewport and read every label's actual `getBoundingClientRect()` against the viewport edges — an objective clip check, not a visual guess. All three branches came back clean at `ZOOM = 1.5`. Two earlier fix attempts on this same class of problem (the headline twinkle) went through multiple rounds of guessing at CSS math with no way to see the result; this is the harder-won lesson from that — when a fix depends on real layout/rendering behavior, render it and measure before shipping if there's any way to do so.
+
+**Standing rule:** if the module count for any branch grows, or ring radii change again, re-run this same check (spin up `npm run dev`, screenshot or measure `getBoundingClientRect()` for each zoomed branch's labels at a narrow phone width) rather than re-deriving the geometry by hand.
+
+**Status:** implemented (`app/src/pages/Home.tsx`: `ZOOM`, `zoomedLabelBudget()`).
+
+---
+
 ## Layout: THE WHAT / THE HOW split view
 
 **Problem it solves:** a learner reading a HOW story often wants to jump back and re-check something specific in THE WHAT (e.g. "what did WHO actually mean again?") without losing their scroll position in the story they were reading.

@@ -15,7 +15,29 @@ const ACCENT: Record<BranchSlug, string> = {
   code: "var(--code)",
 };
 
-const ZOOM = 1.9;
+const ZOOM = 1.5;
+
+// Rough per-character width, in SVG viewBox units, of a bold 1.7-size
+// label — enough to budget label length without needing to measure real
+// rendered text.
+const LABEL_CHAR_WIDTH = 1.05;
+const LABEL_GAP = 2.2; // gap between a node and the start of its label
+const LABEL_EDGE_MARGIN = 2; // breathing room before the true screen edge
+
+/** Max characters a zoomed-in module label can carry before running off
+ * the visible screen edge. All of a branch's labels are on screen at
+ * once when zoomed (unlike the single hover preview in the overview
+ * state), on a budget that shrinks the closer a node sits to due
+ * left/right — a node near the top or bottom of the ring has much more
+ * horizontal room left for its label than one pointing straight out
+ * sideways, which already spends most of the budget just reaching its
+ * own position. */
+function zoomedLabelBudget(angleDeg: number, layoutWidth: number, radius: number) {
+  const halfVisibleWidth = layoutWidth / (2 * ZOOM);
+  const horizontalReach = Math.abs(Math.cos((angleDeg * Math.PI) / 180)) * radius;
+  const remaining = halfVisibleWidth - horizontalReach - LABEL_GAP - LABEL_EDGE_MARGIN;
+  return Math.max(6, Math.min(22, Math.floor(remaining / LABEL_CHAR_WIDTH)));
+}
 
 export default function Home() {
   const [zoomed, setZoomed] = useState<BranchSlug | null>(null);
@@ -155,6 +177,7 @@ function BranchCluster({
   const nodes = moduleNodes(branch, layout);
   const mods = modulesByBranch(branch);
   const accent = ACCENT[branch];
+  const radius = layout.ringRadius[branch];
   const [hovered, setHovered] = useState<string | null>(null);
 
   return (
@@ -181,8 +204,13 @@ function BranchCluster({
         const angleRight = Math.cos((n.angleDeg * Math.PI) / 180) >= 0;
         const mod = mods[i];
         const showLabel = zoomed || hovered === n.slug;
+        const maxLabelLength = zoomed
+          ? zoomedLabelBudget(n.angleDeg, layout.width, radius)
+          : 22;
         const label =
-          mod.title.length > 22 ? `${mod.title.slice(0, 21)}…` : mod.title;
+          mod.title.length > maxLabelLength
+            ? `${mod.title.slice(0, maxLabelLength - 1)}…`
+            : mod.title;
         const labelX = n.x + (angleRight ? 2.2 : -2.2);
 
         return (

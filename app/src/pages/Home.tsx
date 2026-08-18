@@ -6,7 +6,6 @@ import { moduleNodes, type MapLayout } from "../content/mapLayout";
 import { useMapLayout } from "../hooks/useMapLayout";
 import Starfield from "../components/Starfield";
 import ConstellationHouse from "../components/ConstellationHouse";
-import TwinkleTitle from "../components/TwinkleTitle";
 import { useZoomTransition } from "../transition/ZoomTransition";
 import type { BranchSlug } from "../types/content";
 
@@ -15,8 +14,6 @@ const ACCENT: Record<BranchSlug, string> = {
   cowork: "var(--cowork)",
   code: "var(--code)",
 };
-
-const TAGLINE = "Amplify Your Ability to Educate";
 
 const ZOOM = 1.9;
 
@@ -70,7 +67,7 @@ export default function Home() {
           className="text-2xl md:text-4xl font-bold tracking-tight"
           style={{ color: "var(--ink)" }}
         >
-          <TwinkleTitle text={TAGLINE} />
+          Amplify Your Ability to Educate
         </h1>
       </motion.header>
 
@@ -84,7 +81,7 @@ export default function Home() {
           className="text-2xl md:text-4xl font-bold tracking-tight"
           style={{ color: "var(--ink)" }}
         >
-          {zoomed && <TwinkleTitle text={BRANCH_META[zoomed].name} />}
+          {zoomed ? BRANCH_META[zoomed].name : ""}
         </h1>
       </motion.div>
 

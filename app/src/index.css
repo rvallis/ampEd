@@ -66,20 +66,6 @@ body {
   }
 }
 
-/* Same opacity curve as compass-twinkle, no scale: used where the
-   twinkling element is a whole text-clipped layer (TwinkleTitle) rather
-   than a single small dot, since scaling a box that size would visibly
-   zoom/shift the letters instead of reading as a twinkle. */
-@keyframes compass-twinkle-fade {
-  0%,
-  100% {
-    opacity: 0.15;
-  }
-  50% {
-    opacity: 0.9;
-  }
-}
-
 @keyframes compass-braid-flow {
   to {
     stroke-dashoffset: -48;

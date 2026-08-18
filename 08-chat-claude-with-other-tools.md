@@ -1,5 +1,5 @@
 # AmpEd
-*amplify your ability to educate with Claude*
+*amplify your ability to educate*
 ## Claude Chat → Using Claude Alongside Another Tool
 ---
 

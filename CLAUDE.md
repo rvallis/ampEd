@@ -2,7 +2,7 @@
 
 This file exists so a new Claude Code session can pick up this project with full context, without the person re-explaining it from scratch. Read this first, before touching any other file in this folder.
 
-**Naming note:** the project is called **AmpEd** (tagline: *"amplify your ability to educate with Claude"*), renamed from an earlier working title ("Claude Compass"). The folder this all lives in, and this file's own path, may still say `claude-compass` — that's just the folder name on disk, not the product name. Don't rename the folder unless asked; just use "AmpEd" as the product name in all learner-facing UI, copy, and page titles.
+**Naming note:** the project is called **AmpEd** (tagline: *"amplify your ability to educate"*), renamed from an earlier working title ("Claude Compass"). The folder this all lives in, and this file's own path, may still say `claude-compass` — that's just the folder name on disk, not the product name. Don't rename the folder unless asked; just use "AmpEd" as the product name in all learner-facing UI, copy, and page titles.
 
 ---
 
@@ -86,7 +86,7 @@ This is documented as an idea to prototype, not yet validated in a working build
 
 Do not deviate from this without checking with the person first; it's been deliberately iterated on and locked.
 
-1. **Title stack:** `# AmpEd` / `*amplify your ability to educate with Claude*` (italic tagline) / `## [Branch name] → [Module title]` — no module numbers anywhere in learner-facing content, title alone is the identifier
+1. **Title stack:** `# AmpEd` / `*amplify your ability to educate*` (italic tagline) / `## [Branch name] → [Module title]` — no module numbers anywhere in learner-facing content, title alone is the identifier
 2. **Lead-in:** explains the WHAT/HOW two-part structure, tells the learner they can enter non-linearly, states the module's specific learning objective
 3. **`## 🧠 THE WHAT`** — opens with a short (2–7 word) all-caps punchy hook distilling the module's core skill, immediately followed by 1–2 sentences on why that hook is the whole point. This is followed by: a one-sentence version (blockquote), a "Core Idea" section with a plain-language explanation (not skipped in favor of jumping straight to an analogy — the idea must be stated in its own words first, analogy comes after), an **Analogy** callout, a breakdown table or list that echoes the hook's own words, and a **Quick Check** — a question the learner attempts before revealing an answer inside a collapsible `<details>` block. The revealed answer must explicitly tie back to the module's core concept, not just state a correct answer.
 4. **`## 🔄 THE HOW`** — several (not a fixed count — as many as are genuinely powerful, not padded) real-feeling stories, each with its own title (no "Transfer:" label prefix), targeted at a specific audience angle stated under the title, and where possible grounded in real, documented pain-point research (marked with a `*Research note:*` italic line citing what was found, when research grounding exists — not every module has one, some are Claude-product-specific and reasoned rather than literature-grounded, and two modules are real lived case studies rather than invented stories at all).

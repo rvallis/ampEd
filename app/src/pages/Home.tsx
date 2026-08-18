@@ -67,7 +67,7 @@ export default function Home() {
           className="text-2xl md:text-4xl font-bold tracking-tight"
           style={{ color: "var(--ink)" }}
         >
-          Amplify your ability to educate with Claude.
+          Amplify your ability to educate.
         </h1>
       </motion.header>
 

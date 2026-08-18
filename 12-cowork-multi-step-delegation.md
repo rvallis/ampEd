@@ -1,5 +1,5 @@
 # AmpEd
-*amplify your ability to educate with Claude*
+*amplify your ability to educate*
 ## Cowork → Multi-Step Task Delegation
 ---
 

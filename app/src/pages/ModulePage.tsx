@@ -6,6 +6,7 @@ import type { BranchSlug } from "../types/content";
 import WhatPane from "../components/WhatPane";
 import HowPane from "../components/HowPane";
 import Braid from "../components/Braid";
+import ConstellationArrow from "../components/ConstellationArrow";
 
 const ACCENT: Record<BranchSlug, { fg: string; bg: string }> = {
   chat: { fg: "var(--chat)", bg: "var(--chat-bg)" },
@@ -27,7 +28,7 @@ export default function ModulePage() {
   const next = adjacentModule(module, 1);
 
   const goTo = (m: typeof prev) => {
-    if (m) navigate(`/${m.branch}/${m.slug}`);
+    navigate(`/${m.branch}/${m.slug}`);
   };
 
   const onTouchStart = (e: React.TouchEvent) => {
@@ -57,21 +58,20 @@ export default function ModulePage() {
       >
         <Link
           to="/"
-          aria-label="Back to compass"
+          aria-label="Back home to the compass map"
           className="shrink-0 h-9 w-9 flex items-center justify-center rounded-full border"
           style={{ borderColor: "var(--border)", color: "var(--ink)" }}
         >
-          🧭
+          🌍
         </Link>
 
         <button
           onClick={() => goTo(prev)}
-          disabled={!prev}
           aria-label="Previous module"
-          className="hidden md:flex shrink-0 h-9 w-9 rounded-full border disabled:opacity-30 disabled:cursor-default"
-          style={{ borderColor: "var(--border)", color: "var(--ink)" }}
+          className="hidden md:flex shrink-0 h-9 w-9 items-center justify-center"
+          style={{ color: "var(--ink-soft)" }}
         >
-          ‹
+          <ConstellationArrow direction="left" />
         </button>
 
         <div
@@ -95,12 +95,11 @@ export default function ModulePage() {
 
         <button
           onClick={() => goTo(next)}
-          disabled={!next}
           aria-label="Next module"
-          className="hidden md:flex shrink-0 h-9 w-9 rounded-full border disabled:opacity-30 disabled:cursor-default"
-          style={{ borderColor: "var(--border)", color: "var(--ink)" }}
+          className="hidden md:flex shrink-0 h-9 w-9 items-center justify-center"
+          style={{ color: "var(--ink-soft)" }}
         >
-          ›
+          <ConstellationArrow direction="right" />
         </button>
 
         {/* mobile-only: jump to HOW */}

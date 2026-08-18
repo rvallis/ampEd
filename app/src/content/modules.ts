@@ -39,11 +39,12 @@ export function getModule(
   return modules.find((m) => m.branch === branch && m.slug === slug);
 }
 
-export function adjacentModule(
-  m: Module,
-  dir: -1 | 1
-): Module | undefined {
+/** Wraps around: past the last module in a branch, loops back to the
+ * first, and vice versa, so prev/next can be clicked endlessly in either
+ * direction rather than stopping at the ends of the spine. */
+export function adjacentModule(m: Module, dir: -1 | 1): Module {
   const siblings = modulesByBranch(m.branch);
   const i = siblings.findIndex((s) => s.slug === m.slug);
-  return siblings[i + dir];
+  const nextIndex = (i + dir + siblings.length) % siblings.length;
+  return siblings[nextIndex];
 }

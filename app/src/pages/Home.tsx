@@ -5,6 +5,7 @@ import { BRANCH_META, BRANCH_ORDER, modulesByBranch } from "../content/modules";
 import { moduleNodes, type MapLayout } from "../content/mapLayout";
 import { useMapLayout } from "../hooks/useMapLayout";
 import Starfield from "../components/Starfield";
+import HyperspaceBurst from "../components/HyperspaceBurst";
 import { useZoomTransition } from "../transition/ZoomTransition";
 import type { BranchSlug } from "../types/content";
 
@@ -18,6 +19,9 @@ const ZOOM = 1.9;
 
 export default function Home() {
   const [zoomed, setZoomed] = useState<BranchSlug | null>(null);
+  const [burst, setBurst] = useState<{ xPercent: number; yPercent: number } | null>(
+    null
+  );
   const navigate = useNavigate();
   const { zoomInto } = useZoomTransition();
   const layout = useMapLayout();
@@ -32,11 +36,24 @@ export default function Home() {
   const mapX = zoomed ? `${50 - targetXPercent * ZOOM}%` : "0%";
   const mapY = zoomed ? `${50 - targetYPercent * ZOOM}%` : "0%";
 
+  const triggerBurst = (e: React.MouseEvent) => {
+    setBurst({
+      xPercent: (e.clientX / window.innerWidth) * 100,
+      yPercent: (e.clientY / window.innerHeight) * 100,
+    });
+  };
+
+  const selectBranch = (branch: BranchSlug, e: React.MouseEvent) => {
+    triggerBurst(e);
+    setZoomed(branch);
+  };
+
   const diveIntoModule = (
     branch: BranchSlug,
     slug: string,
     e: React.MouseEvent
   ) => {
+    triggerBurst(e);
     const xPercent = (e.clientX / window.innerWidth) * 100;
     const yPercent = (e.clientY / window.innerHeight) * 100;
     zoomInto({ xPercent, yPercent, color: ACCENT[branch] }, () =>
@@ -51,32 +68,18 @@ export default function Home() {
     >
       <Starfield />
 
-      {/* title, recedes when zoomed */}
+      {/* headline, recedes when zoomed */}
       <motion.header
-        className="absolute top-0 inset-x-0 z-10 px-6 pt-8 text-center pointer-events-none"
+        className="absolute top-0 inset-x-0 z-10 px-6 pt-10 text-center pointer-events-none"
         animate={{ opacity: zoomed ? 0 : 1, y: zoomed ? -16 : 0 }}
         transition={{ duration: 0.35 }}
       >
-        <p
-          className="text-xs font-semibold uppercase tracking-[0.2em] mb-2"
-          style={{ color: "var(--ink-soft)" }}
-        >
-          🧭 AmpEd
-        </p>
         <h1
           className="text-2xl md:text-4xl font-bold tracking-tight"
           style={{ color: "var(--ink)" }}
         >
           Amplify your ability to educate with Claude.
         </h1>
-        <p
-          className="mt-2 text-xs md:text-sm max-w-md mx-auto"
-          style={{ color: "var(--ink-soft)" }}
-        >
-          Start wherever you are. One idea, three ways in. Click a branch to
-          zoom in, click a module
-          to dive in.
-        </p>
       </motion.header>
 
       {/* back-to-map control */}
@@ -94,9 +97,9 @@ export default function Home() {
               background: "var(--paper-raised)",
               color: "var(--ink)",
             }}
-            aria-label="Zoom back out to the full map"
+            aria-label="Back home to the full map"
           >
-            🧭
+            🌍
           </motion.button>
         )}
       </AnimatePresence>
@@ -120,19 +123,20 @@ export default function Home() {
               layout={layout}
               dimmed={zoomed !== null && zoomed !== branch}
               zoomed={zoomed === branch}
-              onSelectBranch={() => setZoomed(branch)}
+              onSelectBranch={(e) => selectBranch(branch, e)}
               onSelectModule={(slug, e) => diveIntoModule(branch, slug, e)}
             />
           ))}
         </svg>
       </motion.div>
 
-      <footer
-        className="absolute bottom-0 inset-x-0 px-6 py-5 text-center text-xs pointer-events-none"
-        style={{ color: "var(--ink-soft)" }}
-      >
-        Claude Chat · Cowork · Claude Code
-      </footer>
+      {burst && (
+        <HyperspaceBurst
+          xPercent={burst.xPercent}
+          yPercent={burst.yPercent}
+          onDone={() => setBurst(null)}
+        />
+      )}
     </div>
   );
 }
@@ -149,13 +153,14 @@ function BranchCluster({
   layout: MapLayout;
   dimmed: boolean;
   zoomed: boolean;
-  onSelectBranch: () => void;
+  onSelectBranch: (e: React.MouseEvent) => void;
   onSelectModule: (slug: string, e: React.MouseEvent) => void;
 }) {
   const anchor = layout.anchors[branch];
   const nodes = moduleNodes(branch, layout);
   const mods = modulesByBranch(branch);
   const accent = ACCENT[branch];
+  const [hovered, setHovered] = useState<string | null>(null);
 
   return (
     <motion.g
@@ -180,10 +185,18 @@ function BranchCluster({
       {nodes.map((n, i) => {
         const angleRight = Math.cos((n.angleDeg * Math.PI) / 180) >= 0;
         const mod = mods[i];
+        const showPermanentLabel = zoomed;
+        const showHoverLabel = !zoomed && hovered === n.slug;
+        const label =
+          mod.title.length > 22 ? `${mod.title.slice(0, 21)}…` : mod.title;
+        const labelX = n.x + (angleRight ? 2.2 : -2.2);
+
         return (
           <g
             key={n.slug}
             onClick={(e) => onSelectModule(n.slug, e)}
+            onMouseEnter={() => setHovered(n.slug)}
+            onMouseLeave={() => setHovered(null)}
             style={{ cursor: "pointer" }}
           >
             <circle cx={n.x} cy={n.y} r={2.6} fill="transparent" />
@@ -192,17 +205,20 @@ function BranchCluster({
               cy={n.y}
               r={1.1}
               fill={accent}
+              animate={{ scale: showHoverLabel ? 1.6 : 1 }}
               whileHover={{ scale: 1.6 }}
               style={{ transformOrigin: `${n.x}px ${n.y}px` }}
             />
+
+            {/* permanent label once this branch is zoomed in */}
             <AnimatePresence>
-              {zoomed && (
+              {showPermanentLabel && (
                 <motion.text
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ delay: i * 0.025, duration: 0.25 }}
-                  x={n.x + (angleRight ? 2.2 : -2.2)}
+                  x={labelX}
                   y={n.y + 0.6}
                   textAnchor={angleRight ? "start" : "end"}
                   fontSize={2.3}
@@ -210,10 +226,45 @@ function BranchCluster({
                   fill="var(--ink)"
                   style={{ pointerEvents: "none" }}
                 >
-                  {mod.title.length > 22
-                    ? `${mod.title.slice(0, 21)}…`
-                    : mod.title}
+                  {label}
                 </motion.text>
+              )}
+            </AnimatePresence>
+
+            {/* hover-triggered popup preview, overview state only */}
+            <AnimatePresence>
+              {showHoverLabel && (
+                <motion.g
+                  initial={{ opacity: 0, scale: 0.85 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.85 }}
+                  transition={{ duration: 0.15 }}
+                  style={{
+                    pointerEvents: "none",
+                    transformOrigin: `${n.x}px ${n.y}px`,
+                  }}
+                >
+                  <rect
+                    x={angleRight ? labelX - 0.8 : labelX - label.length * 1.55 - 0.8}
+                    y={n.y - 3.1}
+                    width={label.length * 1.55 + 1.6}
+                    height={4}
+                    rx={1}
+                    fill="var(--paper-raised)"
+                    stroke="var(--border)"
+                    strokeWidth={0.2}
+                  />
+                  <text
+                    x={labelX}
+                    y={n.y - 0.6}
+                    textAnchor={angleRight ? "start" : "end"}
+                    fontSize={2.3}
+                    fontWeight={600}
+                    fill="var(--ink)"
+                  >
+                    {label}
+                  </text>
+                </motion.g>
               )}
             </AnimatePresence>
           </g>
@@ -221,10 +272,7 @@ function BranchCluster({
       })}
 
       {/* branch anchor */}
-      <g
-        onClick={onSelectBranch}
-        style={{ cursor: zoomed ? "default" : "pointer" }}
-      >
+      <g onClick={onSelectBranch} style={{ cursor: zoomed ? "default" : "pointer" }}>
         <circle cx={anchor.x} cy={anchor.y} r={6} fill="transparent" />
         <motion.circle
           cx={anchor.x}
@@ -246,17 +294,6 @@ function BranchCluster({
         >
           {BRANCH_META[branch].name}
         </text>
-        {!zoomed && (
-          <text
-            x={anchor.x}
-            y={anchor.y + 8.5}
-            textAnchor="middle"
-            fontSize={2.2}
-            fill="var(--ink-soft)"
-          >
-            {mods.length} modules
-          </text>
-        )}
       </g>
     </motion.g>
   );

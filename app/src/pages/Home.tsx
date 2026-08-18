@@ -230,8 +230,15 @@ function BranchCluster({
         );
       })}
 
-      {/* branch anchor */}
-      <g onClick={onSelectBranch} style={{ cursor: zoomed ? "default" : "pointer" }}>
+      {/* branch anchor: whileHover on the group drives the name's variant,
+          the dedicated framer-motion pattern for "hover parent, animate
+          child" rather than hand-rolled state */}
+      <motion.g
+        onClick={onSelectBranch}
+        initial="rest"
+        whileHover="hover"
+        style={{ cursor: zoomed ? "default" : "pointer" }}
+      >
         <circle cx={anchor.x} cy={anchor.y} r={6} fill="transparent" />
         <motion.circle
           cx={anchor.x}
@@ -243,18 +250,26 @@ function BranchCluster({
           style={{ transformOrigin: `${anchor.x}px ${anchor.y}px` }}
         />
         {!zoomed && (
-          <text
+          <motion.text
             x={anchor.x}
             y={anchor.y - 4.2}
             textAnchor="middle"
             fontSize={4}
             fontWeight={700}
             fill="var(--ink)"
+            variants={{
+              rest: { scale: 1 },
+              hover: {
+                scale: [1, 1.12, 1],
+                transition: { duration: 3, repeat: Infinity, ease: "easeInOut" },
+              },
+            }}
+            style={{ transformOrigin: `${anchor.x}px ${anchor.y - 4.2}px` }}
           >
             {BRANCH_META[branch].name}
-          </text>
+          </motion.text>
         )}
-      </g>
+      </motion.g>
     </motion.g>
   );
 }

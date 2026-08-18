@@ -194,7 +194,8 @@ function BranchCluster({
       {nodes.map((n, i) => {
         const angleRight = Math.cos((n.angleDeg * Math.PI) / 180) >= 0;
         const mod = mods[i];
-        const showLabel = zoomed || hovered === n.slug;
+        const isHoverPreview = !zoomed && hovered === n.slug;
+        const showLabel = zoomed || isHoverPreview;
         const label =
           mod.title.length > 22 ? `${mod.title.slice(0, 21)}…` : mod.title;
         const labelX = n.x + (angleRight ? 2.2 : -2.2);
@@ -234,9 +235,9 @@ function BranchCluster({
                     x={labelX}
                     y={n.y + 0.6}
                     textAnchor={angleRight ? "start" : "end"}
-                    fontSize={2.3}
+                    fontSize={isHoverPreview ? 1.7 : 2.3}
                     fontWeight={600}
-                    fill={accent}
+                    fill={isHoverPreview ? "var(--ink)" : accent}
                     filter="url(#star-glow)"
                     animate={{ opacity: [0.55, 1, 0.55] }}
                     transition={{

@@ -5,7 +5,7 @@ import { BRANCH_META, BRANCH_ORDER, modulesByBranch } from "../content/modules";
 import { moduleNodes, type MapLayout } from "../content/mapLayout";
 import { useMapLayout } from "../hooks/useMapLayout";
 import Starfield from "../components/Starfield";
-import HyperspaceBurst from "../components/HyperspaceBurst";
+import ConstellationHouse from "../components/ConstellationHouse";
 import { useZoomTransition } from "../transition/ZoomTransition";
 import type { BranchSlug } from "../types/content";
 
@@ -60,7 +60,7 @@ export default function Home() {
       className="relative w-full h-svh overflow-hidden"
       style={{ background: "var(--paper)" }}
     >
-      <Starfield />
+      <Starfield burstNonce={burstNonce} />
 
       {/* headline, recedes when zoomed */}
       <motion.header
@@ -107,7 +107,7 @@ export default function Home() {
             }}
             aria-label="Back home to the full map"
           >
-            🌍
+            <ConstellationHouse />
           </motion.button>
         )}
       </AnimatePresence>
@@ -137,13 +137,6 @@ export default function Home() {
           ))}
         </svg>
       </motion.div>
-
-      {burstNonce && (
-        <HyperspaceBurst
-          key={burstNonce}
-          onDone={() => setBurstNonce(null)}
-        />
-      )}
     </div>
   );
 }

@@ -7,6 +7,7 @@ import WhatPane from "../components/WhatPane";
 import HowPane from "../components/HowPane";
 import Braid from "../components/Braid";
 import ConstellationArrow from "../components/ConstellationArrow";
+import ConstellationHouse from "../components/ConstellationHouse";
 
 const ACCENT: Record<BranchSlug, { fg: string; bg: string }> = {
   chat: { fg: "var(--chat)", bg: "var(--chat-bg)" },
@@ -62,7 +63,7 @@ export default function ModulePage() {
           className="shrink-0 h-9 w-9 flex items-center justify-center rounded-full border"
           style={{ borderColor: "var(--border)", color: "var(--ink)" }}
         >
-          🌍
+          <ConstellationHouse />
         </Link>
 
         <button

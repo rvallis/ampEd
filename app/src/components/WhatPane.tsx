@@ -16,7 +16,7 @@ export default function WhatPane({
           className="text-xs font-semibold uppercase tracking-widest mb-2"
           style={{ color: accent }}
         >
-          🧠 THE WHAT
+          ⚡ THE WHAT
         </p>
         <h2
           className="text-2xl md:text-3xl font-bold leading-tight tracking-tight"

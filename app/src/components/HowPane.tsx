@@ -16,7 +16,7 @@ export default function HowPane({
         className="text-xs font-semibold uppercase tracking-widest"
         style={{ color: accent }}
       >
-        🔄 THE HOW
+        ⚡ THE HOW
       </p>
 
       {module.how.stories.map((story, i) => (

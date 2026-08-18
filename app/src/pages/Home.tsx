@@ -116,6 +116,15 @@ export default function Home() {
           preserveAspectRatio="xMidYMid meet"
           className="w-full h-full select-none"
         >
+          <defs>
+            <filter id="star-glow" x="-60%" y="-60%" width="220%" height="220%">
+              <feGaussianBlur stdDeviation="0.35" result="blur" />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
           {BRANCH_ORDER.map((branch) => (
             <BranchCluster
               key={branch}
@@ -185,8 +194,7 @@ function BranchCluster({
       {nodes.map((n, i) => {
         const angleRight = Math.cos((n.angleDeg * Math.PI) / 180) >= 0;
         const mod = mods[i];
-        const showPermanentLabel = zoomed;
-        const showHoverLabel = !zoomed && hovered === n.slug;
+        const showLabel = zoomed || hovered === n.slug;
         const label =
           mod.title.length > 22 ? `${mod.title.slice(0, 21)}…` : mod.title;
         const labelX = n.x + (angleRight ? 2.2 : -2.2);
@@ -205,65 +213,41 @@ function BranchCluster({
               cy={n.y}
               r={1.1}
               fill={accent}
-              animate={{ scale: showHoverLabel ? 1.6 : 1 }}
+              animate={{ scale: hovered === n.slug ? 1.6 : 1 }}
               whileHover={{ scale: 1.6 }}
               style={{ transformOrigin: `${n.x}px ${n.y}px` }}
             />
 
-            {/* permanent label once this branch is zoomed in */}
+            {/* title floats free, no background, twinkling like starlight.
+                Outer g handles mount/unmount fade; inner text runs its own
+                endless twinkle loop, independent of that fade. */}
             <AnimatePresence>
-              {showPermanentLabel && (
-                <motion.text
+              {showLabel && (
+                <motion.g
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ delay: i * 0.025, duration: 0.25 }}
-                  x={labelX}
-                  y={n.y + 0.6}
-                  textAnchor={angleRight ? "start" : "end"}
-                  fontSize={2.3}
-                  fontWeight={600}
-                  fill="var(--ink)"
                   style={{ pointerEvents: "none" }}
                 >
-                  {label}
-                </motion.text>
-              )}
-            </AnimatePresence>
-
-            {/* hover-triggered popup preview, overview state only */}
-            <AnimatePresence>
-              {showHoverLabel && (
-                <motion.g
-                  initial={{ opacity: 0, scale: 0.85 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.85 }}
-                  transition={{ duration: 0.15 }}
-                  style={{
-                    pointerEvents: "none",
-                    transformOrigin: `${n.x}px ${n.y}px`,
-                  }}
-                >
-                  <rect
-                    x={angleRight ? labelX - 0.8 : labelX - label.length * 1.55 - 0.8}
-                    y={n.y - 3.1}
-                    width={label.length * 1.55 + 1.6}
-                    height={4}
-                    rx={1}
-                    fill="var(--paper-raised)"
-                    stroke="var(--border)"
-                    strokeWidth={0.2}
-                  />
-                  <text
+                  <motion.text
                     x={labelX}
-                    y={n.y - 0.6}
+                    y={n.y + 0.6}
                     textAnchor={angleRight ? "start" : "end"}
                     fontSize={2.3}
                     fontWeight={600}
-                    fill="var(--ink)"
+                    fill={accent}
+                    filter="url(#star-glow)"
+                    animate={{ opacity: [0.55, 1, 0.55] }}
+                    transition={{
+                      duration: 2.2 + (i % 3) * 0.5,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                      delay: i * 0.15,
+                    }}
                   >
                     {label}
-                  </text>
+                  </motion.text>
                 </motion.g>
               )}
             </AnimatePresence>

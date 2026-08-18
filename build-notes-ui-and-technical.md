@@ -69,11 +69,13 @@
 
 **What it is:** every icon-sized interactive control on the compass map and module page is drawn from a small number of twinkling star points connected by thin faint lines, tracing the shape of whatever it represents, rather than using an emoji or a plain SVG glyph. Currently: the prev/next module arrows (`ConstellationArrow.tsx`, three points forming a chevron), and the home/back button (`ConstellationHouse.tsx`, five points tracing a house outline). Both share the same 8-point sparkle path and the same per-point staggered opacity twinkle.
 
+The same 8-point sparkle also appears as a bare typographic accent, not tracing any shape, in `TwinkleText.tsx`: a couple of individual letters in the overview headline ("Amplify Your Ability to Educate") and in the branch name that takes over that slot when zoomed in each get one small twinkling star pinned to their corner. Kept deliberately sparse (2-3 letters, never every letter, never every word) so it still reads as clean and professional rather than decorated — the ask that prompted it was explicit about keeping it that way.
+
 **Why:** it's the one piece of visual identity that ties every interactive chrome element back to the starfield/compass theme, rather than having navigation controls feel like generic UI bolted onto a themed background. It's also a direct, deliberate rejection of using an actual home/arrow emoji for these two specific controls, after the person asked for the change explicitly.
 
-**Standing rule:** if a new small icon-sized control gets added later (not full illustrations, this doesn't apply to the deferred visuals system in the Visuals section below), default to this same technique for consistency rather than reaching for an emoji or a stock icon set.
+**Standing rule:** if a new small icon-sized control gets added later (not full illustrations, this doesn't apply to the deferred visuals system in the Visuals section below), default to this same technique for consistency rather than reaching for an emoji or a stock icon set. Same for any future headline/title-sized text accent: reuse `TwinkleText.tsx`'s sparse-letter-twinkle approach rather than inventing a second sparkle style, and keep the letter count low.
 
-**Status:** implemented (`app/src/components/ConstellationArrow.tsx`, `ConstellationHouse.tsx`).
+**Status:** implemented (`app/src/components/ConstellationArrow.tsx`, `ConstellationHouse.tsx`, `app/src/components/TwinkleText.tsx`).
 
 ---
 

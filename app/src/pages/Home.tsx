@@ -6,6 +6,7 @@ import { moduleNodes, type MapLayout } from "../content/mapLayout";
 import { useMapLayout } from "../hooks/useMapLayout";
 import Starfield from "../components/Starfield";
 import ConstellationHouse from "../components/ConstellationHouse";
+import TwinkleText from "../components/TwinkleText";
 import { useZoomTransition } from "../transition/ZoomTransition";
 import type { BranchSlug } from "../types/content";
 
@@ -13,6 +14,19 @@ const ACCENT: Record<BranchSlug, string> = {
   chat: "var(--chat)",
   cowork: "var(--cowork)",
   code: "var(--code)",
+};
+
+const TAGLINE = "Amplify Your Ability to Educate";
+// A couple of twinkles scattered across the phrase, not one per word: the
+// leading letter of the first, middle, and last word.
+const TAGLINE_TWINKLES = [0, 13, 24];
+
+// Same treatment for the branch name that takes over the headline slot
+// once zoomed in, one twinkle per word.
+const BRANCH_TWINKLES: Record<BranchSlug, number[]> = {
+  chat: [0, 7], // Claude Chat
+  cowork: [0, 5], // Cowork
+  code: [0, 7], // Claude Code
 };
 
 const ZOOM = 1.9;
@@ -67,7 +81,7 @@ export default function Home() {
           className="text-2xl md:text-4xl font-bold tracking-tight"
           style={{ color: "var(--ink)" }}
         >
-          Amplify Your Ability to Educate
+          <TwinkleText text={TAGLINE} indices={TAGLINE_TWINKLES} />
         </h1>
       </motion.header>
 
@@ -81,7 +95,12 @@ export default function Home() {
           className="text-2xl md:text-4xl font-bold tracking-tight"
           style={{ color: "var(--ink)" }}
         >
-          {zoomed ? BRANCH_META[zoomed].name : ""}
+          {zoomed && (
+            <TwinkleText
+              text={BRANCH_META[zoomed].name}
+              indices={BRANCH_TWINKLES[zoomed]}
+            />
+          )}
         </h1>
       </motion.div>
 

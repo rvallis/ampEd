@@ -101,4 +101,25 @@
 
 ---
 
+## Decision 16: Navigation metaphor, first build pass — Zoomable compass map over horizontal scroll rows
+**Decision:** Replaced the initial working build of the compass-metaphor navigation (three horizontally-scrollable branch cards, each opening a horizontally-scrollable row of module cards, per the original build-notes spec) with a literal zoomed-out map: three branches rendered as constellation clusters (a hub node with its modules as connected satellite nodes), starting fully zoomed out, that the learner clicks into. Clicking a branch zooms the whole map into that cluster; clicking a module then navigates into that module's page, with the interaction confirmed working end to end.
+**Reasoning:** The original horizontal-scroll-row build was a reasonable literal reading of "compass navigation" but only reinforced the metaphor through card ordering, not through spatial logic, it still read as a conventional carousel UI. Re-approaching it as an actual map that starts zoomed out and physically zooms in on selection makes the "compass" idea structural rather than decorative: the learner's mental model becomes "I am looking at the whole territory and choosing where to go," which matches the course's core non-linear, choose-your-own-entry-point design decision far more directly than a scrollable list did. This was a build-phase revision requested after seeing the first working version, not a first-attempt guess, consistent with the standing plan to validate navigation ideas in a working build before locking them.
+**Portfolio talking point:** "The first build of the nav was a technically-correct implementation of the spec, but seeing it running made it obvious it wasn't actually earning the 'compass' name, it just alphabetized things a different direction. I rebuilt it as a literal zoomable map instead, which is a good example of a decision that's very hard to get right from a written spec alone and needed a working prototype in front of me before I could tell it was wrong."
+
+---
+
+## Decision 17: THE WHAT / THE HOW boundary — Woven line motif instead of a plain divider
+**Decision:** On the module page, replaced the plain vertical border between THE WHAT and THE HOW panes (desktop split view) with an animated two-strand "braid" rendered in the branch's accent color plus a neutral ink tone, and added a matching horizontal version at the seam of the mobile slide-over panel.
+**Reasoning:** A plain border communicates "these are two separate things placed next to each other," which works against the locked instructional intent that THE WHAT and THE HOW are one continuous skill viewed two ways, not a concept followed by unrelated examples. A woven visual motif at exactly the boundary between them turns the dividing line itself into an argument for their unity, reinforcing the same relationship the content structure already encodes, rather than leaving that relationship to be inferred from proximity alone.
+**Portfolio talking point:** "Even a divider line is a design decision that can either support or undercut what the content is trying to say. I used the boundary between the two halves of a module to visually argue that they're the same idea, not two adjacent ones."
+
+---
+
+## Decision 18: Hyperspace click effect — Built, iterated four times, then cut entirely
+**Decision:** Directed several distinct implementations of a sci-fi "hyperspace jump" flash on every branch/module click over the course of one extended build stretch (a synthetic streak-burst at the click point, then confined to the screen's edges, then a dense full-screen radial convergence, then a rebuild that stretched the actual background starfield instead of a separate overlay), then removed the entire feature on the plain assessment that it "just doesn't look good," with no attempt to salvage a version of it.
+**Reasoning:** Each iteration was a genuine, reasonable attempt at the same brief, refined based on specific, concrete feedback each time (not vague dissatisfaction) rather than abandoned early. The final call to cut the feature entirely, after real investment across multiple builds, rather than keep iterating indefinitely or settling for a version that was merely acceptable, is itself the decision worth recording: recognizing that a feature can be built correctly to spec, iterated in good faith, and still be the wrong call for the final product.
+**Portfolio talking point:** "Not every direction I take a build in survives contact with actually seeing it running. I spent real effort on a hyperspace click effect across four different technical approaches, and the right call in the end was to cut it entirely rather than ship something that was merely fine. Knowing when to walk away from a feature you've already built is a harder skill than knowing when to build one."
+
+---
+
 *Log will continue to be updated as new instructional design decisions are made throughout the build.*

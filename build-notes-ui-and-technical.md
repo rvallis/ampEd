@@ -26,7 +26,7 @@
 
 **Mobile behavior (different from desktop, not the same layout shrunk down):** true side-by-side panes don't work on a narrow screen, two independently scrollable columns would both become unreadable. Instead, THE HOW slides over THE WHAT as an overlay panel, e.g. a swipe or tap brings the HOW story up as a panel on top of THE WHAT, rather than forcing two columns. THE WHAT stays underneath, scroll position preserved, ready to return to when the panel is dismissed.
 
-**Status:** idea only, not a text/markdown-stage concern. Revisit once the actual web/app build begins.
+**Status:** implemented and live (desktop split, mobile slide-over panel), plus the woven-braid boundary treatment below.
 
 ---
 
@@ -50,6 +50,34 @@
 **The hook:** every WHAT section opens with a short, all-caps, punchy header distilling the module's core skill into 2–5 words (e.g. WHO. WHAT. FORMAT. REVISE. for the Prompting Fundamentals module), immediately followed by 1–2 sentences explaining why that hook is the whole point of the module. The same hook reappears woven into any breakdown table or list later in the section, and gets echoed one final time at the module's close, bookending the whole module rather than appearing once and getting forgotten.
 
 **Quick Check reveal:** every Quick Check poses a question and asks the learner to attempt an answer before revealing one. A sample strong answer follows immediately after, inside a collapsible element so the learner has to consciously choose to reveal it rather than seeing it automatically (protects the retrieval-practice effect). The answer doesn't just give the correct response, it explicitly names which parts of the module's core concept the answer demonstrates, so the reveal reinforces the lesson a second time.
+
+---
+
+## Icon language: constellation stars, not emoji or plain glyphs
+
+**What it is:** every icon-sized interactive control on the compass map and module page is drawn from a small number of twinkling star points connected by thin faint lines, tracing the shape of whatever it represents, rather than using an emoji or a plain SVG glyph. Currently: the prev/next module arrows (`ConstellationArrow.tsx`, three points forming a chevron), and the home/back button (`ConstellationHouse.tsx`, five points tracing a house outline). Both share the same 8-point sparkle path and the same per-point staggered opacity twinkle.
+
+**Why:** it's the one piece of visual identity that ties every interactive chrome element back to the starfield/compass theme, rather than having navigation controls feel like generic UI bolted onto a themed background. It's also a direct, deliberate rejection of using an actual home/arrow emoji for these two specific controls, after the person asked for the change explicitly.
+
+**Standing rule:** if a new small icon-sized control gets added later (not full illustrations, this doesn't apply to the deferred visuals system in the Visuals section below), default to this same technique for consistency rather than reaching for an emoji or a stock icon set.
+
+**Status:** implemented (`app/src/components/ConstellationArrow.tsx`, `ConstellationHouse.tsx`).
+
+---
+
+## Hub hover pulse
+
+**What it is:** in the compass map's overview state, hovering a branch's hub (the central dot, e.g. Claude Chat's) makes the branch name text pulse in the same gentle rhythm the hub dot already always pulses in ambiently (scale 1 → 1.12 → 1, 3s loop). The text is otherwise static.
+
+**How it's built:** framer-motion's `whileHover` on the wrapping `<motion.g>` combined with a `variants` prop on the child `<motion.text>` (parent gesture drives a named variant on the child), not hand-rolled hover state. This is the idiomatic framer-motion pattern for "hovering element A should animate element B" and is more reliable than manual `onMouseEnter`/`onMouseLeave` + conditional `animate` props.
+
+**Status:** implemented, overview state only (the name isn't rendered at the hub once a branch is zoomed in — see the zoomed-branch-name-relocates note above).
+
+---
+
+## Hyperspace / light-speed click effect — tried, removed
+
+Multiple approaches were built and iterated on for a sci-fi "hyperspace jump" flash on every branch/module click: a synthetic streak-burst centered on the click point, then confined to the screen's outer edge, then rebuilt as a dense full-screen radial convergence from center, then rebuilt again to stretch the actual background starfield stars themselves instead of a separate overlay. All were removed entirely at the person's request ("it just doesn't look good"). **Don't re-add any version of this without the person explicitly asking again** — it was tried thoroughly, not overlooked.
 
 ---
 

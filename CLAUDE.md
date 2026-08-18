@@ -6,6 +6,19 @@ This file exists so a new Claude Code session can pick up this project with full
 
 ---
 
+## 0. Current status (read this first — it's not aspirational, it's built and live)
+
+The site is a real, deployed, working app — not a plan. Don't treat anything below as "to build" unless it's explicitly flagged as open in Section 7.
+
+- **Live:** https://ampedai.vercel.app
+- **Repo (public):** https://github.com/rvallis/ampEd — the `app/` subfolder is the actual Vite/React/TypeScript build; the repo root (this folder) holds the 22 source module `.md` files plus this handoff, the decisions log, and build-notes
+- **Deploy pipeline:** git-connected to Vercel — every push to `main` auto-deploys. No manual deploy steps needed. Vercel project root directory is set to `app`.
+- **Navigation is genuinely a zoomable compass map**, not horizontal scroll rows (see Section 3's note and `build-notes-ui-and-technical.md` for the full story of why that changed after the first version was seen running).
+- **What's been through real iteration already**, so don't re-propose these from scratch: the WHAT/HOW split view, the constellation-style icon language (prev/next arrows and the home button are literally traced through small twinkling stars, not emoji or plain glyphs — see `build-notes-ui-and-technical.md`), module titles floating with no background box, wraparound module navigation (prev/next loops forever, no dead ends). A "hyperspace"/light-speed click effect was built, iterated on extensively across several different approaches, and ultimately **removed entirely** because it didn't look good — don't re-add it without the person explicitly asking again.
+- If you're a fresh session picking this up cold (e.g. a cloud/mobile session with no memory of prior conversations): read this file fully, then `build-notes-ui-and-technical.md`, then skim `instructional-design-decisions-log.md`'s most recent entries and the last handful of `git log` messages in `app/` for the most current tactical context. That combination should be sufficient — if you find yourself needing to ask the person to re-explain something already answered here, that's a gap worth closing in this file.
+
+---
+
 ## 1. What this project is
 
 AmpEd is a portfolio piece and a real learning resource, built by an AI-directed course developer (17 years as a public school educator, now building freelance instructional design work directed through Claude and Claude Code). It's the flagship proof of a specific professional identity: someone with deep pedagogy and domain expertise who directs AI to build sophisticated things, rather than a traditional instructional designer or a traditional developer.

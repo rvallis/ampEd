@@ -78,6 +78,7 @@ body {
     opacity: 1;
   }
   55% {
+    transform: rotate(var(--angle)) scaleX(1);
     opacity: 1;
   }
   100% {

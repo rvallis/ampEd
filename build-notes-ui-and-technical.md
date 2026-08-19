@@ -69,6 +69,22 @@
 
 ---
 
+## Compass map background: galaxy band
+
+**What it is:** a soft, diagonal galaxy-band glow sits behind the compass map's existing dot starfield (`Galaxy.tsx`, rendered under `Starfield.tsx` in `Home.tsx`) — a warm gold/amber core fading through dusty rose to cool blue-violet at the edges, suggesting the Milky Way band the person referenced as a visual target, without being a literal reproduction of it.
+
+**Built procedurally, not as an image:** it's a single `div` styled entirely with layered CSS gradients (`.galaxy-band` in `index.css`) — a wide blurred `linear-gradient` stripe for the band itself plus a soft `radial-gradient` bulge to thicken the core, no image asset. This was a deliberate choice over using an actual photo: the rest of the map (dot starfield, constellation icons) is entirely code-generated, so a photographic background would both add real page weight and be a style departure from that established abstract, hand-drawn identity. Matches Starfield.tsx's own "cheap, deterministic, no images" approach.
+
+**Theme-aware, not just color-swapped:** light and dark mode need genuinely different treatment, not the same gradient with different hex values. Dark mode blends the band onto near-black paper with `mix-blend-mode: screen`, so it actually glows the way a real night-sky photo does. Light mode uses `multiply` at much lower opacity against the cream paper, since `screen` would just wash out and disappear on a bright background — same gradient shape, tuned per-theme via the existing `--galaxy-*` CSS custom properties (same pattern as `--ink`/`--paper`/the branch accent colors, overridden under the existing `prefers-color-scheme: dark` block).
+
+**Scope:** compass map only (`Home.tsx`), matching where the dot starfield already lives — module reading pages don't have a starfield today either, so this doesn't extend that boundary.
+
+**How it was checked:** rendered and screenshotted via the same local dev-server-plus-Playwright setup as the zoomed-label-clipping fix above, in both light and dark, and at both a phone and a desktop viewport (the band's cool edge only becomes visible on the wider desktop crop — worth checking both when touching this again).
+
+**Status:** implemented (`app/src/components/Galaxy.tsx`, `.galaxy-band` and `--galaxy-*` custom properties in `index.css`).
+
+---
+
 ## Content Patterns (standing rules for every module)
 
 **Section naming:** the two halves of every module are called **THE WHAT** (the skill itself) and **THE HOW** (the real-world stories showing that skill applied), in all caps. Earlier drafts used "The Knowledge" and "The Knowledge Transfer," but "transfer" is instructional-design jargon that isn't self-explanatory to a first-time visitor and creates friction ("why is it called that?") in a course built for fast, self-directed entry. WHAT and HOW are the two questions a learner is already asking themselves, no translation needed. Individual story titles under THE HOW carry no label prefix either, just plain, punchy titles (e.g. "The Quiz Nobody Could Use").

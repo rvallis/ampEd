@@ -5,6 +5,7 @@ import { BRANCH_META, BRANCH_ORDER, modulesByBranch } from "../content/modules";
 import { moduleNodes, type MapLayout } from "../content/mapLayout";
 import { useMapLayout } from "../hooks/useMapLayout";
 import Starfield from "../components/Starfield";
+import Galaxy from "../components/Galaxy";
 import ConstellationHouse from "../components/ConstellationHouse";
 import { useZoomTransition } from "../transition/ZoomTransition";
 import type { BranchSlug } from "../types/content";
@@ -77,6 +78,7 @@ export default function Home() {
       className="relative w-full h-svh overflow-hidden"
       style={{ background: "var(--paper)" }}
     >
+      <Galaxy />
       <Starfield />
 
       {/* headline, recedes when zoomed */}

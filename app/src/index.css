@@ -15,6 +15,15 @@
   --cowork-bg: #e2f1ec;
   --code: #4a3aad;
   --code-bg: #ebe7fa;
+
+  /* galaxy band behind the compass map's starfield: deep, muted in
+     light mode since it tints a bright paper via multiply rather than
+     glowing against dark */
+  --galaxy-core: #d99a4a;
+  --galaxy-mid: #b06a55;
+  --galaxy-edge: #3a4489;
+  --galaxy-opacity: 0.14;
+  --galaxy-blend: multiply;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -32,6 +41,15 @@
     --cowork-bg: #12261f;
     --code: #a698f2;
     --code-bg: #211b3a;
+
+    /* screen blend against near-black paper: the band actually glows,
+       so it can use lighter, more saturated stops than the light-mode
+       multiply version above */
+    --galaxy-core: #f5c98a;
+    --galaxy-mid: #d9835f;
+    --galaxy-edge: #4a5aa8;
+    --galaxy-opacity: 0.4;
+    --galaxy-blend: screen;
   }
 }
 
@@ -70,6 +88,36 @@ body {
   to {
     stroke-dashoffset: -48;
   }
+}
+
+/* diagonal galaxy band behind the compass map's dot starfield: a pure
+   CSS gradient, no image asset, so it stays as lightweight as the dot
+   stars it sits behind and matches their code-generated (not
+   photographic) look. A wide, blurred linear-gradient stripe reads as
+   a hazy band across the sky; a soft radial glow layered on top
+   thickens the middle the way a galaxy's core is denser than its arms. */
+.galaxy-band {
+  background:
+    radial-gradient(
+      ellipse 55% 30% at 50% 48%,
+      var(--galaxy-core) 0%,
+      transparent 70%
+    ),
+    linear-gradient(
+      108deg,
+      transparent 0%,
+      transparent 22%,
+      var(--galaxy-edge) 34%,
+      var(--galaxy-mid) 45%,
+      var(--galaxy-core) 50%,
+      var(--galaxy-mid) 55%,
+      var(--galaxy-edge) 66%,
+      transparent 78%,
+      transparent 100%
+    );
+  opacity: var(--galaxy-opacity);
+  mix-blend-mode: var(--galaxy-blend);
+  filter: blur(48px);
 }
 
 /* horizontal scroll rows: snap, no visible scrollbar */
